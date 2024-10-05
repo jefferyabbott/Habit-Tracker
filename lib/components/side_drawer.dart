@@ -12,10 +12,24 @@ class SideDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface,
       child: Center(
-        child: CupertinoSwitch(
-          value: Provider.of<ThemeProvider>(context).isDarkMode,
-          onChanged: (value) =>
-              Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
+        child: Padding(
+          padding: const EdgeInsets.all(48.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text(
+                "Dark Mode",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 20),
+              CupertinoSwitch(
+                value: Provider.of<ThemeProvider>(context).isDarkMode,
+                onChanged: (value) =>
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .toggleTheme(),
+              ),
+            ],
+          ),
         ),
       ),
     );
