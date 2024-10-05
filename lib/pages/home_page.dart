@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/components/side_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../themes/theme_provider.dart';
@@ -11,17 +11,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        child: Center(
-          child: CupertinoSwitch(
-            value: Provider.of<ThemeProvider>(context).isDarkMode,
-            onChanged: (value) =>
-                Provider.of<ThemeProvider>(context, listen: false)
-                    .toggleTheme(),
-          ),
-        ),
-      ),
+      drawer: SideDrawer(),
     );
   }
 }
