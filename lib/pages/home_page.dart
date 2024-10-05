@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/components/habit_tile.dart';
 import 'package:habit_tracker/components/side_drawer.dart';
 import 'package:habit_tracker/database/habit_database.dart';
 import 'package:habit_tracker/utils/habit_utilities.dart';
@@ -22,42 +23,48 @@ class _HomePageState extends State<HomePage> {
 
   final TextEditingController textController = TextEditingController();
 
+  void createNewHabit() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: TextField(
+          controller: textController,
+          decoration: InputDecoration(
+            hintText: "Create a new habit",
+          ),
+        ),
+        actions: [
+          // cancel button
+          MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+              textController.clear();
+            },
+            child: const Text('cancel'),
+          ),
+          // save button
+          MaterialButton(
+            onPressed: () {
+              String newHabitName = textController.text;
+              context.read<HabitDatabase>().addHabit(newHabitName);
+              Navigator.pop(context);
+              textController.clear();
+            },
+            child: const Text('save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void checkHabitOnOff(bool? value, Habit habit) {
+    if (value != null) {
+      context.read<HabitDatabase>().updateHabitCompletion(habit.id, value);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void createNewHabit() {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: TextField(
-            controller: textController,
-            decoration: InputDecoration(
-              hintText: "Create a new habit",
-            ),
-          ),
-          actions: [
-            // cancel button
-            MaterialButton(
-              onPressed: () {
-                Navigator.pop(context);
-                textController.clear();
-              },
-              child: const Text('cancel'),
-            ),
-            // save button
-            MaterialButton(
-              onPressed: () {
-                String newHabitName = textController.text;
-                context.read<HabitDatabase>().addHabit(newHabitName);
-                Navigator.pop(context);
-                textController.clear();
-              },
-              child: const Text('save'),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(),
@@ -82,8 +89,10 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, index) {
         final habit = currentHabbits[index];
         bool isCompletedToday = isHabitCompletedToday(habit.completedDays);
-        return ListTile(
-          title: Text(habit.name),
+        return HabitTile(
+          text: habit.name,
+          isCompleted: isCompletedToday,
+          onChanged: (value) => checkHabitOnOff(value, habit),
         );
       },
     );
