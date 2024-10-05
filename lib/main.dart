@@ -29,7 +29,7 @@ class HabitTracker extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: HomePage(),
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }
